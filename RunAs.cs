@@ -87,6 +87,16 @@ namespace Penguin
 
         public static Process Start(string UserName, string Password, bool noProfile, bool env, bool netOnly, string applicationName, string commandLine, string currentDirectory)
         {
+            if (string.IsNullOrWhiteSpace(UserName))
+            {
+                throw new ArgumentException($"'{nameof(UserName)}' cannot be null or whitespace.", nameof(UserName));
+            }
+
+            if (string.IsNullOrWhiteSpace(applicationName))
+            {
+                throw new ArgumentException($"'{nameof(applicationName)}' cannot be null or whitespace.", nameof(applicationName));
+            }
+
             if (!applicationName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
             {
                 string exe = AssocQueryString(AssocStr.Executable, Path.GetExtension(applicationName));
@@ -152,6 +162,11 @@ namespace Penguin
 
         public static string RetrievePassword(string username)
         {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new ArgumentException($"'{nameof(username)}' cannot be null or whitespace.", nameof(username));
+            }
+
             string applicationName = $"RunAs:{username}";
 
             Credential credentials = CredentialManager.ReadCredential(applicationName);
